@@ -68,5 +68,23 @@ class UserService {
       throw error;
     }
   }
+
+  // ? authenticate
+  async isAuthenticated(token) {
+    try {
+      const response = this.veryfyToken(token);
+      if (!response) {
+        throw { error: "invlid token" };
+      }
+      const user = await this.userRepository.getByid(response.id);
+      if (!user) {
+        throw { error: "Token with corresponding address token not found" };
+      }
+      return user.id;
+    } catch (error) {
+      console.log("Something went wrong in auth service");
+      throw error;
+    }
+  }
 }
 module.exports = UserService;
